@@ -51,6 +51,12 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     List<Card> cards = new ArrayList<>();
 
+
+    @ToString.Exclude
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_email")
+    List<Authority> authorities = new ArrayList<>();
+
     public User(String email, String userName, String password, String gender, Date dateOfBirth, String country) {
         this.email = email;
         this.userName = userName;
@@ -74,6 +80,10 @@ public class User {
             card.setUser(this);
         }
         this.cards = cards;
+    }
+
+    void addAuthority(Authority authority) {
+        this.authorities.add(authority);
     }
 
 }
