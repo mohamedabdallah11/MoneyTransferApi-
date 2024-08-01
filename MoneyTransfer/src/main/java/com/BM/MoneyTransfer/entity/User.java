@@ -26,6 +26,7 @@ public class User {
     @Column(name = "username")
     private String userName;
 
+
     @Column(name = "password")
     private String password;
 
@@ -71,23 +72,23 @@ public class User {
         this.country = country;
     }
 
-    void addFavouriteRecipient(User user) {
+    public void addFavouriteRecipient(User user) {
         favouriteRecipients.add(user);
     }
 
-    void addCard(Card card) {
+    public void addCard(Card card) {
         cards.add(card);
         card.setUser(this);
     }
 
-    void setCards(List<Card> cards) {
+    public void setCards(List<Card> cards) {
         for (Card card : cards) {
             card.setUser(this);
         }
         this.cards = cards;
     }
 
-    void addAuthority(Authority authority) {
+    public void addAuthority(Authority authority) {
         this.authorities.add(authority);
     }
 
