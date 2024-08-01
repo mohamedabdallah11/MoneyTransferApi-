@@ -1,7 +1,7 @@
 package com.BM.MoneyTransfer.controller;
 
 
-import com.BM.MoneyTransfer.dto.UserLoginDTO;
+import com.BM.MoneyTransfer.dto.UserLoginRequestDTO;
 import com.BM.MoneyTransfer.entity.User;
 import com.BM.MoneyTransfer.service.JwtService;
 import com.BM.MoneyTransfer.service.UserService;
@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginDTO userLoginDto) {
+    public ResponseEntity<?> login(@RequestBody UserLoginRequestDTO userLoginDto) {
         try {
             // Authenticate the user
             authenticationManager.authenticate(
