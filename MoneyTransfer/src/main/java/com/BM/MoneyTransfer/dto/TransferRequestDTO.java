@@ -18,10 +18,10 @@ public class TransferRequestDTO {
     private String sendCurrency;
 
     @NotNull
-    private String receiverName;
+    private String recipientName;
 
     @NotNull
-    private String receiverEmail; // Ask the front-end what is meant by account in the Figma design (email or card number)
+    private String recipientCardNumber; // Ask the front-end what is meant by account in the Figma design (email or card number)
 
     @NotNull
     private Double receiveAmount;
