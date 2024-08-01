@@ -53,7 +53,7 @@ public class User {
 
 
     @ToString.Exclude
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_email")
     List<Authority> authorities = new ArrayList<>();
 

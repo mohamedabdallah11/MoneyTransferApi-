@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
+public interface TransactionDao extends JpaRepository<Transaction, Integer> {
     @Query("SELECT t FROM Transaction t WHERE t.senderEmail = :email OR t.recipientEmail = :email")
     Page<Transaction> findByEmail(@Param("email") String email, Pageable pageable);
 }
