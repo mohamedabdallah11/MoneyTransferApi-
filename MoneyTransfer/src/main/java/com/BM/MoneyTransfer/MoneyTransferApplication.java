@@ -1,6 +1,6 @@
 package com.BM.MoneyTransfer;
 
-import com.BM.MoneyTransfer.dao.UserDAO;
+import com.BM.MoneyTransfer.dao.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,9 +15,9 @@ public class MoneyTransferApplication {
 
 
     @Bean
-    CommandLineRunner commandLineRunner(UserDAO userDAO) {
+    CommandLineRunner commandLineRunner(UserRepository userRepository) {
         return runner -> {
-            
+
         };
     }
 }
