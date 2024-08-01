@@ -1,5 +1,7 @@
 package com.BM.MoneyTransfer.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @NoArgsConstructor
@@ -7,8 +9,10 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class UserLoginDTO {
-
+public class UserLoginRequestDTO {
+    @Email
+    @NotNull
     private String email;
+    @NotNull
     private String password;
 }
