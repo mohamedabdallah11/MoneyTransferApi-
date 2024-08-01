@@ -1,13 +1,16 @@
 package com.BM.MoneyTransfer.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @ToString
-public class UserLoginDTO {
+@Builder
+public class UserLoginRequestDTO {
+    @NotNull
     private String email;
+    @NotNull
     private String password;
 }
