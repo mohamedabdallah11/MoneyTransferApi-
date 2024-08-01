@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @Builder
 public class TransactionDTO {
     //we should return the account not the card, We should discuss the card/account part again
