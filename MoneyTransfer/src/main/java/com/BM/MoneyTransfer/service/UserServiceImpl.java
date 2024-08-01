@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,16 +17,24 @@ import java.util.Collection;
 public class UserServiceImpl implements UserService {
 
     UserDao userDao;
+    PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public void save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userDao.save(user);
+
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDao.findById(username).orElseThrow(() -> new UsernameNotFoundException("Invalid username or password."));
-        System.out.println(user);
 
         Collection<SimpleGrantedAuthority> authorities = mapRolesToAuthorities(user.getAuthorities());
 

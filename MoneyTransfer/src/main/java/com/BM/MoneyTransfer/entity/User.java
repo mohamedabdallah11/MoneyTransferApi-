@@ -1,6 +1,8 @@
 package com.BM.MoneyTransfer.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -14,10 +16,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class User {
+
     @Id
     @Column(name = "email")
+    @Email(message = "Email is not valid")
     private String email;
 
+    @Size(min = 6)
     @Column(name = "username")
     private String userName;
 
