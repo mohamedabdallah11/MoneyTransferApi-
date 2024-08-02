@@ -21,6 +21,7 @@ public class CardController {
 
     @PostMapping
     public ResponseEntity<?> addCard(@RequestBody Card card) {
+
         return ResponseEntity.ok(cardService.addCard(card));
     }
 

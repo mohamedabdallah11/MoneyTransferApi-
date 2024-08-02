@@ -1,5 +1,6 @@
 package com.BM.MoneyTransfer.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
@@ -51,16 +52,19 @@ public class User {
             joinColumns = @JoinColumn(name = "user_email1"),
             inverseJoinColumns = @JoinColumn(name = "user_email2")
     )
+    @JsonIgnore
     List<User> favouriteRecipients = new ArrayList<>();
 
     @ToString.Exclude
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
     List<Card> cards = new ArrayList<>();
 
 
     @ToString.Exclude
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_email")
+    @JsonIgnore
     List<Authority> authorities = new ArrayList<>();
 
     public User(String email, String userName, String password, String gender, Date dateOfBirth, String country) {
