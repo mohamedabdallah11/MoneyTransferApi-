@@ -1,6 +1,7 @@
 package com.BM.MoneyTransfer.entity;
 
 
+import com.BM.MoneyTransfer.dto.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,16 +48,16 @@ public class Transaction {
     private Date date;
 
     @Column(name = "status")
-    private String status;
-//
-//    public Transaction(String senderCardNumber, String recipientCardNumber, String senderUserName, String recipientUserName, Double amount, Date date, String status) {
-//        this.senderCardNumber = senderCardNumber;
-//        this.recipientCardNumber = recipientCardNumber;
-//        this.senderUserName = senderUserName;
-//        this.recipientUserName = recipientUserName;
-//        this.amount = amount;
-//        this.date = date;
-//        this.status = status;
-//    }
+    private Status status;
+
+    public Transaction(String senderCardNumber, String recipientCardNumber, String senderUserName, String recipientUserName, Double amount, Date date, Status status) {
+        this.senderCardNumber = senderCardNumber;
+        this.recipientCardNumber = recipientCardNumber;
+        this.senderUserName = senderUserName;
+        this.recipientUserName = recipientUserName;
+        this.amount = amount;
+        this.date = date;
+        this.status = status;
+    }
 
 }

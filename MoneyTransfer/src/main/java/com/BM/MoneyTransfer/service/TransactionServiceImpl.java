@@ -1,6 +1,7 @@
 package com.BM.MoneyTransfer.service;
 
 import com.BM.MoneyTransfer.dao.TransactionDao;
+import com.BM.MoneyTransfer.dto.enums.Status;
 import com.BM.MoneyTransfer.entity.Card;
 import com.BM.MoneyTransfer.entity.Transaction;
 import com.BM.MoneyTransfer.exception.custom.InsufficientFundsException;
@@ -25,14 +26,14 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional
     public Transaction save(Transaction transaction) {
         // Initially set status to "pending"
-        transaction.setStatus("pending");
+        transaction.setStatus(Status.PENDING);
 
         try {
             validateTransaction(transaction);
             performTransaction(transaction);
-            transaction.setStatus("approved");
+            transaction.setStatus(Status.APPROVED);
         } catch (Exception e) {
-            transaction.setStatus("denied");
+            transaction.setStatus(Status.DENIED);
         }
 
         // Save the transaction with its status
