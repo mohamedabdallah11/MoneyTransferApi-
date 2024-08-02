@@ -1,5 +1,6 @@
 package com.BM.MoneyTransfer.service;
 
+import com.BM.MoneyTransfer.dao.CardDao;
 import com.BM.MoneyTransfer.dao.TransactionDao;
 import com.BM.MoneyTransfer.entity.Card;
 import com.BM.MoneyTransfer.entity.Transaction;
@@ -18,6 +19,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
 
+    private final CardDao cardDao;
     TransactionDao transactionDao;
     CardService cardService;
 
@@ -50,11 +52,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     protected void validateTransaction(Transaction transaction) throws SenderNotFoundException, RecipientNotFoundException, InsufficientFundsException {
-        Card senderCard = cardService.getCard(transaction.getSenderCardNumber());
-        if (senderCard == null) {
-            throw new SenderNotFoundException("Sender not found");
-        }
-        if (transaction.getAmount().compareTo(senderCard.getBalance()) > 0) {
+
+        if (transaction.getAmount().compareTo(cardDao.findCardBalanceByCardNumberForUpdate(transaction.getSenderCardNumber())) > 0) {
             throw new InsufficientFundsException("Insufficient funds");
         }
         Card recipientCard = cardService.getCard(transaction.getRecipientCardNumber());
