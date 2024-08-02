@@ -1,5 +1,6 @@
 package com.BM.MoneyTransfer.controller;
 
+import com.BM.MoneyTransfer.dto.enums.Status;
 import com.BM.MoneyTransfer.entity.Transaction;
 import com.BM.MoneyTransfer.response.TransactionResponse;
 import com.BM.MoneyTransfer.service.TransactionService;
@@ -40,7 +41,10 @@ public class TransactionController {
         transaction.setSenderEmail(userEmail);
 
         Transaction savedTransaction = transactionService.save(transaction);
+        String message;
+        if(savedTransaction.getStatus() == Status.APPROVED){message = "Transaction approved";}
+        else{message = "Transaction failed";}
 
-        return ResponseEntity.ok(new TransactionResponse(savedTransaction, "Transaction approved"));
+        return ResponseEntity.ok(new TransactionResponse(savedTransaction, message));
     }
 }
