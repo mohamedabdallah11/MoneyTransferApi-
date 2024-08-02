@@ -7,11 +7,12 @@ import com.BM.MoneyTransfer.entity.Transaction;
 import com.BM.MoneyTransfer.exception.custom.InsufficientFundsException;
 import com.BM.MoneyTransfer.exception.custom.RecipientNotFoundException;
 import com.BM.MoneyTransfer.exception.custom.SenderNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -24,7 +25,7 @@ public class TransactionServiceImpl implements TransactionService {
     CardService cardService;
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public Transaction save(Transaction transaction) {
         // Initially set status to "pending"
         transaction.setStatus("pending");
