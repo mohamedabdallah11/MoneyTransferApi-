@@ -1,5 +1,8 @@
 package com.BM.MoneyTransfer.exception;
 
+import com.BM.MoneyTransfer.exception.custom.CardNotFoundException;
+import com.BM.MoneyTransfer.exception.custom.InvalidCardDetailsException;
+import com.BM.MoneyTransfer.exception.custom.UserNotFoundException;
 import com.BM.MoneyTransfer.exception.custom.InsufficientFundsException;
 import com.BM.MoneyTransfer.exception.custom.RecipientNotFoundException;
 import com.BM.MoneyTransfer.exception.custom.SenderNotFoundException;
@@ -28,6 +31,22 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleRecipientNotFound(RecipientNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse("Recipient Not Found", ex.getMessage()));
+    }
+    public ResponseEntity<ErrorResponse> handleCardNotFound(CardNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse("Card Not Found", ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidCardDetailsException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCardDetails(InvalidCardDetailsException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse("Invalid Card Details", ex.getMessage()));
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse("User Not Found", ex.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
