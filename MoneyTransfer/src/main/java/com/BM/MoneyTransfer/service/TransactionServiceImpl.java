@@ -34,12 +34,18 @@ public class TransactionServiceImpl implements TransactionService {
             validateTransaction(transaction);
             performTransaction(transaction);
             transaction.setStatus(Status.APPROVED);
+            return transactionDao.save(transaction);
+
+        }
+        catch (InsufficientFundsException e) {
+            transaction.setStatus(Status.DENIED);
+            return transactionDao.save(transaction);
         } catch (Exception e) {
             transaction.setStatus(Status.DENIED);
         }
 
         // Save the transaction with its status
-        return this.transactionDao.save(transaction);
+        return transaction;
     }
 
     @Override
@@ -52,14 +58,15 @@ public class TransactionServiceImpl implements TransactionService {
         return this.transactionDao.findByEmail(email, pageable);
     }
 
-    protected void validateTransaction(Transaction transaction) throws  RecipientNotFoundException, InsufficientFundsException {
+    protected void validateTransaction(Transaction transaction) throws RecipientNotFoundException, InsufficientFundsException {
 
-        if (transaction.getAmount().compareTo(cardDao.findCardBalanceByCardNumberForUpdate(transaction.getSenderCardNumber())) > 0) {
-            throw new InsufficientFundsException("Insufficient funds");
-        }
         Card recipientCard = cardService.getCard(transaction.getRecipientCardNumber());
         if (recipientCard == null) {
             throw new RecipientNotFoundException("Recipient not found");
+        }
+        if (transaction.getAmount().compareTo(cardDao.findCardBalanceByCardNumberForUpdate(transaction.getSenderCardNumber())) > 0) {
+            throw new InsufficientFundsException("Insufficient funds");
+
         }
     }
 
