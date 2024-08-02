@@ -2,6 +2,8 @@ package com.BM.MoneyTransfer.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +12,9 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "transaction")
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Transaction {
 
     @Id
@@ -44,15 +48,15 @@ public class Transaction {
 
     @Column(name = "status")
     private String status;
-
-    public Transaction(String senderCardNumber, String recipientCardNumber, String senderUserName, String recipientUserName, Double amount, Date date, String status) {
-        this.senderCardNumber = senderCardNumber;
-        this.recipientCardNumber = recipientCardNumber;
-        this.senderUserName = senderUserName;
-        this.recipientUserName = recipientUserName;
-        this.amount = amount;
-        this.date = date;
-        this.status = status;
-    }
+//
+//    public Transaction(String senderCardNumber, String recipientCardNumber, String senderUserName, String recipientUserName, Double amount, Date date, String status) {
+//        this.senderCardNumber = senderCardNumber;
+//        this.recipientCardNumber = recipientCardNumber;
+//        this.senderUserName = senderUserName;
+//        this.recipientUserName = recipientUserName;
+//        this.amount = amount;
+//        this.date = date;
+//        this.status = status;
+//    }
 
 }
