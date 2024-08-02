@@ -7,7 +7,6 @@ import com.BM.MoneyTransfer.entity.Card;
 import com.BM.MoneyTransfer.entity.Transaction;
 import com.BM.MoneyTransfer.exception.custom.InsufficientFundsException;
 import com.BM.MoneyTransfer.exception.custom.RecipientNotFoundException;
-import com.BM.MoneyTransfer.exception.custom.SenderNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,7 +52,7 @@ public class TransactionServiceImpl implements TransactionService {
         return this.transactionDao.findByEmail(email, pageable);
     }
 
-    protected void validateTransaction(Transaction transaction) throws SenderNotFoundException, RecipientNotFoundException, InsufficientFundsException {
+    protected void validateTransaction(Transaction transaction) throws  RecipientNotFoundException, InsufficientFundsException {
 
         if (transaction.getAmount().compareTo(cardDao.findCardBalanceByCardNumberForUpdate(transaction.getSenderCardNumber())) > 0) {
             throw new InsufficientFundsException("Insufficient funds");

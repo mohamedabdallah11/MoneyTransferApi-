@@ -20,8 +20,8 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "transaction_id")
+    private Long id;
 
     @Column(name = "sender_card_number")
     private String senderCardNumber;
@@ -35,10 +35,10 @@ public class Transaction {
     @Column(name = "recipient_username")
     private String recipientUserName;
 
-    @Column(name="send_email")
+    @Column(name = "sender_email")
     private String senderEmail;
 
-    @Column(name="recipient_email")
+    @Column(name = "recipient_email")
     private String recipientEmail;
 
     @Column(name = "amount")
@@ -48,6 +48,7 @@ public class Transaction {
     private Date date;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     public Transaction(String senderCardNumber, String recipientCardNumber, String senderUserName, String recipientUserName, Double amount, Date date, Status status) {
