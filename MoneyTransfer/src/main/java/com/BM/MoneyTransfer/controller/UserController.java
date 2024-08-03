@@ -80,5 +80,13 @@ public class UserController {
 
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        jwtService.blacklistToken(token);
+        return ResponseEntity.ok("Logged out successfully");
+    }
 
 }

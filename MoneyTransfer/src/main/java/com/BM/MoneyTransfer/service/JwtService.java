@@ -7,10 +7,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 @Service
@@ -23,6 +25,12 @@ public class JwtService {
     private long jwtExpirationInMs;
 
     private Key key;
+
+    private final RedisTemplate<String, String> redisTemplate;
+
+    public JwtService(RedisTemplate<String, String> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     @PostConstruct
     public void init() {
@@ -60,7 +68,11 @@ public class JwtService {
 
     public boolean validateToken(String token) {
         try {
+            if (redisTemplate.hasKey(token)) {
+                return false;
+            }
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+
             return true;
         } catch (Exception e) {
             // Handle different exceptions (ExpiredJwtException, UnsupportedJwtException, etc.)
@@ -71,5 +83,11 @@ public class JwtService {
     public String refreshToken(String token) {
         Claims claims = getAllClaimsFromToken(token);
         return generateToken(claims.getSubject());
+    }
+
+    public void blacklistToken(String token) {
+        Date expirationDate = getAllClaimsFromToken(token).getExpiration();
+        long expirationTime = expirationDate.getTime() - System.currentTimeMillis();
+        redisTemplate.opsForValue().set(token, "blacklisted", expirationTime, TimeUnit.MILLISECONDS);
     }
 }
