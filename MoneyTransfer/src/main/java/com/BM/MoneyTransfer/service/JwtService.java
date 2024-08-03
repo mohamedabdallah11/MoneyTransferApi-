@@ -67,4 +67,9 @@ public class JwtService {
             return false;
         }
     }
+
+    public String refreshToken(String token) {
+        Claims claims = getAllClaimsFromToken(token);
+        return generateToken(claims.getSubject());
+    }
 }

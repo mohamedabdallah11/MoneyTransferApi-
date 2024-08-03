@@ -15,7 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -58,7 +58,7 @@ public class UserController {
             );
 
             // Generate the JWT token
-            final String jwt = jwtService.generateToken(userLoginDto.getEmail());
+            String jwt = jwtService.generateToken(userLoginDto.getEmail());
 
             // Return the JWT token in the response
             return ResponseEntity.ok(jwt);
@@ -70,9 +70,14 @@ public class UserController {
 
     }
 
-    @GetMapping("/users")
-    public List<User> getUsers() {
-        return userService.findAll();
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(@RequestHeader("Authorization") String token) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        String refreshedToken = jwtService.refreshToken(token);
+        return ResponseEntity.ok(refreshedToken);
+
     }
 
 

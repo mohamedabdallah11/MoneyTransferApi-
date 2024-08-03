@@ -27,7 +27,7 @@ public class TransactionController {
     public Page<Transaction> getTransactionHistory(Pageable pageable) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
-        System.out.println("userEmail= " + userEmail);
+
 
         return transactionService.findByEmail(userEmail, pageable);
     }
@@ -42,8 +42,11 @@ public class TransactionController {
 
         Transaction savedTransaction = transactionService.save(transaction);
         String message;
-        if(savedTransaction.getStatus() == Status.APPROVED){message = "Transaction approved";}
-        else{message = "Transaction failed";}
+        if (savedTransaction.getStatus() == Status.APPROVED) {
+            message = "Transaction approved";
+        } else {
+            message = "Transaction failed";
+        }
 
         return ResponseEntity.ok(new TransactionResponse(savedTransaction, message));
     }
