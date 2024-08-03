@@ -52,7 +52,6 @@ public class CardControllerTest {
 
         verify(cardService, times(1)).addCard(any(Card.class));
     }
-    //For Card
     @Test
     public void testGetCard() throws Exception {
         Card card = new Card();
