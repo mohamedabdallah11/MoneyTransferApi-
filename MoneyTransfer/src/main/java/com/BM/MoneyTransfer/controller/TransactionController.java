@@ -2,6 +2,9 @@ package com.BM.MoneyTransfer.controller;
 
 import com.BM.MoneyTransfer.dto.enums.Status;
 import com.BM.MoneyTransfer.entity.Transaction;
+import com.BM.MoneyTransfer.exception.custom.InsufficientFundsException;
+import com.BM.MoneyTransfer.exception.custom.RecipientNotFoundException;
+import com.BM.MoneyTransfer.exception.custom.SenderNotFoundException;
 import com.BM.MoneyTransfer.response.TransactionResponse;
 import com.BM.MoneyTransfer.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,21 +36,27 @@ public class TransactionController {
     }
 
     @PostMapping("/transfer")
-    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody Transaction transaction) {
+    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody Transaction transaction) throws InsufficientFundsException, RecipientNotFoundException, SenderNotFoundException {
         // Get the authenticated user's email
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
 
         transaction.setSenderEmail(userEmail);
 
-        Transaction savedTransaction = transactionService.save(transaction);
+        try {
+
+            transaction = transactionService.save(transaction);
+        } catch (RecipientNotFoundException | SenderNotFoundException | InsufficientFundsException e) {
+            throw e;
+        }
+
         String message;
-        if (savedTransaction.getStatus() == Status.APPROVED) {
+        if (transaction.getStatus() == Status.APPROVED) {
             message = "Transaction approved";
         } else {
             message = "Transaction failed";
         }
 
-        return ResponseEntity.ok(new TransactionResponse(savedTransaction, message));
+        return ResponseEntity.ok(new TransactionResponse(transaction, message));
     }
 }

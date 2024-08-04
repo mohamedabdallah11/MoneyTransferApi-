@@ -7,46 +7,56 @@ import com.BM.MoneyTransfer.entity.Card;
 import com.BM.MoneyTransfer.entity.Transaction;
 import com.BM.MoneyTransfer.exception.custom.InsufficientFundsException;
 import com.BM.MoneyTransfer.exception.custom.RecipientNotFoundException;
-import lombok.AllArgsConstructor;
+import com.BM.MoneyTransfer.exception.custom.SenderNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+//@AllArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
 
-    private final CardDao cardDao;
     TransactionDao transactionDao;
-    CardService cardService;
+    CardDao cardDao;
+
+    @Autowired
+    public TransactionServiceImpl(TransactionDao transactionDao, CardDao carddao) {
+        this.transactionDao = transactionDao;
+        this.cardDao = carddao;
+    }
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public Transaction save(Transaction transaction) {
-        // Initially set status to "pending"
-        transaction.setStatus(Status.PENDING);
+    public Transaction save(Transaction transaction) throws SenderNotFoundException, RecipientNotFoundException, InsufficientFundsException {
+        Card senderCard = cardDao.findCardByCardNumberForUpdate(transaction.getSenderCardNumber());
+        Card recipientCard = cardDao.findById(transaction.getRecipientCardNumber()).orElse(null);
 
-        try {
-            validateTransaction(transaction);
-            performTransaction(transaction);
+        if (senderCard == null || !Objects.equals(senderCard.getUser().getEmail(), transaction.getSenderEmail())) {
+            transaction.setStatus(Status.DENIED);
+            throw new SenderNotFoundException("Sender Not Found");
+        }
+        if (recipientCard == null || !Objects.equals(recipientCard.getUser().getEmail(), transaction.getRecipientEmail())) {
+            transaction.setStatus(Status.DENIED);
+            throw new RecipientNotFoundException("Recipient Not Found");
+        }
+        if (transaction.getAmount().compareTo(senderCard.getBalance()) > 0) {
+            transaction.setStatus(Status.DENIED);
+            transactionDao.save(transaction);
+            throw new InsufficientFundsException("Insufficient funds");
+        } else {
             transaction.setStatus(Status.APPROVED);
-            return transactionDao.save(transaction);
-
+            senderCard.setBalance(senderCard.getBalance() - transaction.getAmount());
+            recipientCard.setBalance(recipientCard.getBalance() + transaction.getAmount());
         }
-        catch (InsufficientFundsException e) {
-            transaction.setStatus(Status.DENIED);
-            return transactionDao.save(transaction);
-        } catch (Exception e) {
-            transaction.setStatus(Status.DENIED);
-        }
-
-        // Save the transaction with its status
-        return transaction;
+        return transactionDao.save(transaction);
     }
+
 
     @Override
     public Optional<Transaction> findById(Long id) {
@@ -58,24 +68,5 @@ public class TransactionServiceImpl implements TransactionService {
         return this.transactionDao.findByEmail(email, pageable);
     }
 
-    protected void validateTransaction(Transaction transaction) throws RecipientNotFoundException, InsufficientFundsException {
-
-        Card recipientCard = cardService.getCard(transaction.getRecipientCardNumber());
-        if (recipientCard == null) {
-            throw new RecipientNotFoundException("Recipient not found");
-        }
-        if (transaction.getAmount().compareTo(cardDao.findCardBalanceByCardNumberForUpdate(transaction.getSenderCardNumber())) > 0) {
-            throw new InsufficientFundsException("Insufficient funds");
-
-        }
-    }
-
-    protected void performTransaction(Transaction transaction) {
-        Card senderCard = cardService.getCard(transaction.getSenderCardNumber());
-        Card recipientCard = cardService.getCard(transaction.getRecipientCardNumber());
-
-        cardService.updateCardBalance(senderCard.getCardNumber(), senderCard.getBalance() - transaction.getAmount());
-        cardService.updateCardBalance(recipientCard.getCardNumber(), recipientCard.getBalance() + transaction.getAmount());
-    }
 
 }
