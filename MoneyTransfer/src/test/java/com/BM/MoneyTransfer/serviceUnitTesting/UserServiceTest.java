@@ -118,5 +118,17 @@ class UserServiceTest {
         assertFalse(user1.getFavouriteRecipients().contains(user2));
     }
 
+    @Test
+    void testFindById() {
+        User user = new User("test@example.com", "username", "password", "MALE", LocalDate.now(), "USA");
+        when(userDao.findById(anyString())).thenReturn(Optional.of(user));
+
+        ViewUserProfileDTO result = userService.findById("test@example.com");
+
+        assertEquals("username", result.getName());  // Adjust to getName()
+        assertEquals("test@example.com", result.getEmail());
+        assertEquals("MALE", result.getGender());
+        verify(userDao, times(1)).findById(anyString());
+    }
 
 }
