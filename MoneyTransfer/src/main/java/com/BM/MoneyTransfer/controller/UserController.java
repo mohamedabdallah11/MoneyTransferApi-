@@ -1,22 +1,24 @@
 package com.BM.MoneyTransfer.controller;
 
 
+import com.BM.MoneyTransfer.dto.LoginResponseDTO;
 import com.BM.MoneyTransfer.dto.SignUpRequestDTO;
 import com.BM.MoneyTransfer.dto.UserLoginRequestDTO;
-import com.BM.MoneyTransfer.entity.User;
+import com.BM.MoneyTransfer.dto.ViewUserProfileDTO;
 import com.BM.MoneyTransfer.service.JwtService;
 import com.BM.MoneyTransfer.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -62,7 +64,7 @@ public class UserController {
             String jwt = jwtService.generateToken(userLoginDto.getEmail());
 
             // Return the JWT token in the response
-            return ResponseEntity.ok(jwt);
+            return ResponseEntity.ok(new LoginResponseDTO(HttpStatus.OK,"Bearer","Login successful!",jwt));
 
         } catch (AuthenticationException e) {
             // Handle authentication failure
@@ -90,8 +92,8 @@ public class UserController {
         return ResponseEntity.ok("Logged out successfully");
     }
 
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userService.findAll();
+    @GetMapping("/user")
+    public ViewUserProfileDTO getCurrentUser() {
+        return userService.findById(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 }

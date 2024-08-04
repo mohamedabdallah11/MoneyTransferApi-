@@ -1,7 +1,7 @@
 package com.BM.MoneyTransfer.dto;
 
 
-import com.BM.MoneyTransfer.dto.enums.Gender;
+import com.BM.MoneyTransfer.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +14,12 @@ import lombok.NoArgsConstructor;
 public class ViewUserProfileDTO {
     private String name;
     private String email;
-    private Gender gender;
-    private String phoneNumber;
-    private String token;
+    private String gender;
+
+    public ViewUserProfileDTO(User user){
+        this.name=user.getUserName();
+        this.email=user.getEmail();
+        this.gender=user.getGender();
+
+    }
 }

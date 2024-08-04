@@ -31,15 +31,15 @@ public class User {
     @NotNull(message = "Password cannot be null")
     @Size(min = 6, max = 60, message = "Password must be at least 6 characters and at most 60 characters long")
     @Column(name = "password")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$", message = "Password must contain at least one letter, one number, and one special character")
+//    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$", message = "Password must contain at least one letter, one number, and one special character")
     private String password;
 
     @Column(name = "gender")
 //    @Enumerated(EnumType.STRING)
     private String gender;
 
-    @NotNull(message = "Date of birth cannot be null")
-    @Past(message = "Date of birth must be in the past")
+//    @NotNull(message = "Date of birth cannot be null")
+//    @Past(message = "Date of birth must be in the past")
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
@@ -48,7 +48,7 @@ public class User {
     @Column(name = "country")
     private String country;
 
-    @NotNull(message = "Active status cannot be null")
+//    @NotNull(message = "Active status cannot be null")
     @Min(value = 0, message = "Active status must be 0 or 1")
     @Max(value = 1, message = "Active status must be 0 or 1")
     @Column(name = "is_active")

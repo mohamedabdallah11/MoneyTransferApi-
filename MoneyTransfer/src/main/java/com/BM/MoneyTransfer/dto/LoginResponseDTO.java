@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginResponseDTO {
-    private String token;
+    private HttpStatus status;
     private String tokenType;
     private String message;
-    private HttpStatus status;
+    private String token;
 }

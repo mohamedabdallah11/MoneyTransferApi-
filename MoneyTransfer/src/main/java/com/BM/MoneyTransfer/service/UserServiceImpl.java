@@ -2,6 +2,7 @@ package com.BM.MoneyTransfer.service;
 
 import com.BM.MoneyTransfer.dao.UserDao;
 import com.BM.MoneyTransfer.dto.ViewUserDTO;
+import com.BM.MoneyTransfer.dto.ViewUserProfileDTO;
 import com.BM.MoneyTransfer.entity.Authority;
 import com.BM.MoneyTransfer.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,5 +97,10 @@ public class UserServiceImpl implements UserService {
         User user1 = userDao.findById(getCurrentUserEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         User user2 = userDao.findById(recipientEmail).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         user1.getFavouriteRecipients().remove(user2);
+    }
+
+    @Override
+    public ViewUserProfileDTO findById(String email) {
+        return new ViewUserProfileDTO(userDao.findById(email).orElseThrow(() -> new UsernameNotFoundException("User not found")));
     }
 }
