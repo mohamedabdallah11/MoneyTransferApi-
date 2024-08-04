@@ -8,8 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -35,7 +35,7 @@ public class User {
     private String gender;
 
     @Column(name = "date_of_birth")
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
 
     @Column(name = "country")
@@ -67,7 +67,7 @@ public class User {
     @JsonIgnore
     List<Authority> authorities = new ArrayList<>();
 
-    public User(String email, String userName, String password, String gender, Date dateOfBirth, String country) {
+    public User(String email, String userName, String password, String gender, LocalDate dateOfBirth, String country) {
         this.email = email;
         this.userName = userName;
         this.password = password;
