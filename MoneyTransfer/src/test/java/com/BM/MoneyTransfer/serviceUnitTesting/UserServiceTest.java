@@ -28,6 +28,10 @@ class UserServiceTest {
     @InjectMocks
     private UserServiceImpl userService;
 
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
 
 
