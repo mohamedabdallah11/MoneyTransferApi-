@@ -73,4 +73,9 @@ public class Card {
         this.currency = currency;
         this.accountType = accountType;
     }
+
+    public Card(String cardNumber, Double balance) {
+        this.cardNumber = cardNumber;
+        this.balance = balance;
+    }
 }
