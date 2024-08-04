@@ -83,5 +83,19 @@ public class TransactionServiceTest {
         verify(transactionDao).save(any(Transaction.class));
     }
 
+    @Test
+    public void testSaveTransaction_RecipientNotFound() {
+        Transaction transaction = new Transaction(
+                "1234567890123456", "6543210987654321",
+                "senderUser", "recipientUser",
+                "sender@example.com", "recipient@example.com",
+                100.0, new Date(), Status.PENDING);
 
+        when(cardService.getCard(anyString())).thenThrow(new RecipientNotFoundException("Recipient not found"));
+
+        Transaction savedTransaction = transactionService.save(transaction);
+
+        assertEquals(Status.DENIED, savedTransaction.getStatus());
+        verify(transactionDao).save(any(Transaction.class));
+    }
 }
