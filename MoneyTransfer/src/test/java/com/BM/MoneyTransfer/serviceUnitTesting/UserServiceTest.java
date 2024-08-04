@@ -54,6 +54,17 @@ class UserServiceTest {
         verify(userDao, times(1)).findAll();
     }
 
+    @Test
+    void testLoadUserByUsername_UserExists() {
+        User user = new User("test@example.com", "username", "password", "MALE", LocalDate.now(), "USA");
+        when(userDao.findById(anyString())).thenReturn(Optional.of(user));
+
+        org.springframework.security.core.userdetails.UserDetails result = userService.loadUserByUsername("test@example.com");
+
+        assertEquals("test@example.com", result.getUsername());
+        assertEquals("password", result.getPassword());
+        verify(userDao, times(1)).findById(anyString());
+    }
 
 
 
