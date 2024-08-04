@@ -1,8 +1,8 @@
 package com.BM.MoneyTransfer.entity;
 
+import com.BM.MoneyTransfer.dto.enums.Gender;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -20,29 +20,39 @@ public class User {
     @Id
     @Column(name = "email")
     @Email(message = "Email is not valid")
+    @NotNull(message = "Email cannot be null")
     private String email;
 
-    @Size(min = 6)
+    @Size(min = 6, max = 255, message = "Username must be between 6 and 255 characters")
+    @NotNull(message = "Username cannot be null")
     @Column(name = "username")
     private String userName;
 
-
+    @NotNull(message = "Password cannot be null")
+    @Size(min = 6, message = "Password must be at least 6 characters long")
     @Column(name = "password")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$", message = "Password must contain at least one letter, one number, and one special character")
     private String password;
 
     @Column(name = "gender")
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
+    @NotNull(message = "Date of birth cannot be null")
+    @Past(message = "Date of birth must be in the past")
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
-
+    @NotNull(message = "Country cannot be null")
+    @Size(min = 1, max = 50, message = "Country must be between 1 and 50 characters")
     @Column(name = "country")
     private String country;
 
+    @NotNull(message = "Active status cannot be null")
+    @Min(value = 0, message = "Active status must be 0 or 1")
+    @Max(value = 1, message = "Active status must be 0 or 1")
     @Column(name = "is_active")
     private Integer isActive = 1;
-
 
     @ToString.Exclude
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -57,13 +67,12 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     List<Card> cards = new ArrayList<>();
 
-
     @ToString.Exclude
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_email")
     List<Authority> authorities = new ArrayList<>();
 
-    public User(String email, String userName, String password, String gender, Date dateOfBirth, String country) {
+    public User(String email, String userName, String password, Gender gender, Date dateOfBirth, String country) {
         this.email = email;
         this.userName = userName;
         this.password = password;
@@ -91,5 +100,4 @@ public class User {
     public void addAuthority(Authority authority) {
         this.authorities.add(authority);
     }
-
 }
