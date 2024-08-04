@@ -90,5 +90,19 @@ class UserControllerTest {
         assertEquals(new LoginResponseDTO(HttpStatus.OK, "Bearer", "Login successful!", "jwtToken"), responseEntity.getBody());
     }
 
+    @Test
+    void testLogin_Failure() {
+        UserLoginRequestDTO userLoginRequestDTO = new UserLoginRequestDTO();
+        userLoginRequestDTO.setEmail("test@example.com");
+        userLoginRequestDTO.setPassword("password");
+
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenThrow(new RuntimeException("Invalid credentials"));
+
+        ResponseEntity<?> responseEntity = userController.login(userLoginRequestDTO);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
+        assertEquals("Invalid credentials", responseEntity.getBody());
+    }
+
 
 }
