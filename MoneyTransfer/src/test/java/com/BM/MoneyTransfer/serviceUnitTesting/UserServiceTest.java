@@ -66,6 +66,14 @@ class UserServiceTest {
         verify(userDao, times(1)).findById(anyString());
     }
 
+    @Test
+    void testLoadUserByUsername_UserDoesNotExist() {
+        when(userDao.findById(anyString())).thenReturn(Optional.empty());
+
+        assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("test@example.com"));
+    }
+
+
 
 
 }
