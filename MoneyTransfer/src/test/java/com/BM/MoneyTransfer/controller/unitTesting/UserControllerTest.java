@@ -75,6 +75,20 @@ class UserControllerTest {
         verify(userService, times(0)).save(any());
     }
 
+    @Test
+    void testLogin_Success() {
+        UserLoginRequestDTO userLoginRequestDTO = new UserLoginRequestDTO();
+        userLoginRequestDTO.setEmail("test@example.com");
+        userLoginRequestDTO.setPassword("password");
+
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(mock(Authentication.class));
+        when(jwtService.generateToken(anyString())).thenReturn("jwtToken");
+
+        ResponseEntity<?> responseEntity = userController.login(userLoginRequestDTO);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(new LoginResponseDTO(HttpStatus.OK, "Bearer", "Login successful!", "jwtToken"), responseEntity.getBody());
+    }
 
 
 }
