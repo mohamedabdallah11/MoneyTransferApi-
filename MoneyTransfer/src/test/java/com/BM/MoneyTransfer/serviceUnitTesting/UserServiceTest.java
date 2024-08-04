@@ -43,6 +43,16 @@ class UserServiceTest {
         assertNotEquals("password", user.getPassword());
     }
 
+    @Test
+    void testFindAll() {
+        List<User> users = List.of(new User("test@example.com", "username", "password", "MALE", LocalDate.now(), "USA"));
+        when(userDao.findAll()).thenReturn(users);
+
+        List<User> result = userService.findAll();
+
+        assertEquals(1, result.size());
+        verify(userDao, times(1)).findAll();
+    }
 
 
 
