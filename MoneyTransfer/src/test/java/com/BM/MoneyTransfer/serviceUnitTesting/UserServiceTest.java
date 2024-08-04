@@ -88,5 +88,19 @@ class UserServiceTest {
         assertTrue(user1.getFavouriteRecipients().contains(user2));
     }
 
+    @Test
+    void testFindFavorite() {
+        User user1 = new User("test1@example.com", "username1", "password", "MALE", LocalDate.now(), "USA");
+        User user2 = new User("test2@example.com", "username2", "password", "MALE", LocalDate.now(), "USA");
+        user1.addFavouriteRecipient(user2);
+
+        when(userDao.findById("test1@example.com")).thenReturn(Optional.of(user1));
+
+        List<ViewUserDTO> result = userService.findFavorite();
+
+        assertEquals(1, result.size());
+        verify(userDao, times(1)).findById("test1@example.com");
+    }
+
 
 }
