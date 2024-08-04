@@ -1,6 +1,5 @@
 package com.BM.MoneyTransfer.entity;
 
-import com.BM.MoneyTransfer.dto.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -8,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.time.LocalDate;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +35,8 @@ public class User {
     private String password;
 
     @Column(name = "gender")
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+//    @Enumerated(EnumType.STRING)
+    private String gender;
 
     @NotNull(message = "Date of birth cannot be null")
     @Past(message = "Date of birth must be in the past")
@@ -77,7 +75,7 @@ public class User {
     @JsonIgnore
     List<Authority> authorities = new ArrayList<>();
 
-    public User(String email, String userName, String password, Gender gender, LocalDate dateOfBirth, String country) {
+    public User(String email, String userName, String password, String gender, LocalDate dateOfBirth, String country) {
         this.email = email;
         this.userName = userName;
         this.password = password;

@@ -12,10 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ViewUserProfileDTO {
-    private Double balance;
     private String name;
     private String email;
     private Gender gender;
     private String phoneNumber;
-    private String currency;
+    private String token;
 }

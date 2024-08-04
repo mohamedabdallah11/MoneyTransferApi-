@@ -2,8 +2,6 @@ package com.BM.MoneyTransfer.dto;
 
 import com.BM.MoneyTransfer.dto.enums.Gender;
 import com.BM.MoneyTransfer.entity.User;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,8 +26,8 @@ public class SignUpRequestDTO {
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$", message = "Password must contain at least one letter, one number, and one special character")
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+//    @Enumerated(EnumType.STRING)
+    private String gender;
 
     @NotNull(message = "Date of birth cannot be null")
     @Past(message = "Date of birth must be in the past")
