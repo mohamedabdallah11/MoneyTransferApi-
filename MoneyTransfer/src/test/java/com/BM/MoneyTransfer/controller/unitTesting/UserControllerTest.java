@@ -50,6 +50,17 @@ class UserControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    @Test
+    void testRegister_Success() {
+        SignUpRequestDTO signUpRequestDTO = new SignUpRequestDTO();
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        ResponseEntity<?> responseEntity = userController.register(signUpRequestDTO, bindingResult);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals("User registered successfully", responseEntity.getBody());
+        verify(userService, times(1)).save(any());
+    }
 
 
 
