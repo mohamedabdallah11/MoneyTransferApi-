@@ -45,6 +45,12 @@ class UserControllerTest {
     @InjectMocks
     private UserController userController;
 
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+
 
 
 
