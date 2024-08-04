@@ -80,5 +80,14 @@ public class TransactionControllerTest {
                 .andExpect(jsonPath("$.message", is("Transaction approved")));
     }
 
+    @Test
+    public void testGetTransactionHistory() throws Exception {
+        Page<Transaction> transactionPage = mock(Page.class);
+        when(transactionService.findByEmail(anyString(), any(Pageable.class))).thenReturn(transactionPage);
 
+        mockMvc.perform(get("/api/transactions")
+                        .principal(() -> "sender@example.com"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray());
+    }
 }
