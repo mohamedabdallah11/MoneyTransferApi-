@@ -114,6 +114,8 @@ class UserControllerTest {
         ViewUserProfileDTO viewUserProfileDTO = new ViewUserProfileDTO();
         when(userService.findById(userEmail)).thenReturn(viewUserProfileDTO);
 
+        ViewUserProfileDTO result = userController.getCurrentUser();
 
+        assertEquals(viewUserProfileDTO, result);
     }
 }
