@@ -54,6 +54,31 @@ public class TransactionControllerTest {
                 .build();
     }
 
+    @Test
+    public void testCreateTransaction() throws Exception {
+        Transaction transaction = new Transaction(
+                "1234567890123456", "6543210987654321",
+                "senderUser", "recipientUser",
+                "sender@example.com", "recipient@example.com",
+                100.0, new Date(), Status.APPROVED);
+
+        TransferResponseDTO response = TransferResponseDTO.builder()
+                .transactionId(transaction.getId().toString())
+                .status(transaction.getStatus().name())
+                .message("Transaction approved")
+                .build();
+
+        when(transactionService.save(any(Transaction.class))).thenReturn(transaction);
+
+        mockMvc.perform(post("/api/transfer")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(transaction))
+                        .principal(() -> "sender@example.com"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.transactionId", is(transaction.getId().toString())))
+                .andExpect(jsonPath("$.status", is(transaction.getStatus().name())))
+                .andExpect(jsonPath("$.message", is("Transaction approved")));
+    }
 
 
 }
