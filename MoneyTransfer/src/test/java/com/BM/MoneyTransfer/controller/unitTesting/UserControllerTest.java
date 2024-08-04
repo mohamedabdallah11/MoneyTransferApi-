@@ -104,5 +104,16 @@ class UserControllerTest {
         assertEquals("Invalid credentials", responseEntity.getBody());
     }
 
+    @Test
+    void testGetCurrentUser_Success() {
+        String userEmail = "test@example.com";
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn(userEmail);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        ViewUserProfileDTO viewUserProfileDTO = new ViewUserProfileDTO();
+        when(userService.findById(userEmail)).thenReturn(viewUserProfileDTO);
+
+
+    }
 }
