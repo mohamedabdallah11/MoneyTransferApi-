@@ -67,5 +67,21 @@ public class TransactionServiceTest {
         verify(transactionDao).save(any(Transaction.class));
     }
 
+    @Test
+    public void testSaveTransaction_InsufficientFunds() throws Exception {
+        Transaction transaction = new Transaction(
+                "1234567890123456", "6543210987654321",
+                "senderUser", "recipientUser",
+                "sender@example.com", "recipient@example.com",
+                300.0, new Date(), Status.PENDING);
+
+        when(cardDao.findCardBalanceByCardNumberForUpdate(anyString())).thenReturn(200.0);
+
+        Transaction savedTransaction = transactionService.save(transaction);
+
+        assertEquals(Status.DENIED, savedTransaction.getStatus());
+        verify(transactionDao).save(any(Transaction.class));
+    }
+
 
 }
