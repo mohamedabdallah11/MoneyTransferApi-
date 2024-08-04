@@ -125,7 +125,7 @@ class UserServiceTest {
 
         ViewUserProfileDTO result = userService.findById("test@example.com");
 
-        assertEquals("username", result.getName());  // Adjust to getName()
+        assertEquals("username", result.getName());
         assertEquals("test@example.com", result.getEmail());
         assertEquals("MALE", result.getGender());
         verify(userDao, times(1)).findById(anyString());
