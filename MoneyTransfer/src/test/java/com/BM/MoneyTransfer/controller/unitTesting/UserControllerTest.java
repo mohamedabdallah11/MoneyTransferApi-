@@ -62,6 +62,18 @@ class UserControllerTest {
         verify(userService, times(1)).save(any());
     }
 
+    @Test
+    void testRegister_ValidationErrors() {
+        SignUpRequestDTO signUpRequestDTO = new SignUpRequestDTO();
+        when(bindingResult.hasErrors()).thenReturn(true);
+        when(bindingResult.getFieldErrors()).thenReturn(List.of(new FieldError("field", "field", "error")));
+
+        ResponseEntity<?> responseEntity = userController.register(signUpRequestDTO, bindingResult);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(Map.of("field", "error"), responseEntity.getBody());
+        verify(userService, times(0)).save(any());
+    }
 
 
 
