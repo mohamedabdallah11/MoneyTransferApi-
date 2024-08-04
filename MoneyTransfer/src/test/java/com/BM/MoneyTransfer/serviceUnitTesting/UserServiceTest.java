@@ -33,6 +33,16 @@ class UserServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    @Test
+    void testSave() {
+        User user = new User("test@example.com", "username", "password", "MALE", LocalDate.now(), "USA");
+
+        userService.save(user);
+
+        verify(userDao, times(1)).save(any(User.class));
+        assertNotEquals("password", user.getPassword());
+    }
+
 
 
 
