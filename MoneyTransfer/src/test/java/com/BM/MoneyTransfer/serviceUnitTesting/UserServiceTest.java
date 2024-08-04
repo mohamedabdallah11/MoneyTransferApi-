@@ -102,5 +102,21 @@ class UserServiceTest {
         verify(userDao, times(1)).findById("test1@example.com");
     }
 
+    @Test
+    void testRemoveFavorite() {
+        User user1 = new User("test1@example.com", "username1", "password", "MALE", LocalDate.now(), "USA");
+        User user2 = new User("test2@example.com", "username2", "password", "MALE", LocalDate.now(), "USA");
+        user1.addFavouriteRecipient(user2);
+
+        when(userDao.findById("test1@example.com")).thenReturn(Optional.of(user1));
+        when(userDao.findById("test2@example.com")).thenReturn(Optional.of(user2));
+
+        userService.removeFavorite("test2@example.com");
+
+        verify(userDao, times(1)).findById("test1@example.com");
+        verify(userDao, times(1)).findById("test2@example.com");
+        assertFalse(user1.getFavouriteRecipients().contains(user2));
+    }
+
 
 }
