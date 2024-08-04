@@ -73,7 +73,20 @@ class UserServiceTest {
         assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("test@example.com"));
     }
 
+    @Test
+    void testAddFavorite() {
+        User user1 = new User("test1@example.com", "username1", "password", "MALE", LocalDate.now(), "USA");
+        User user2 = new User("test2@example.com", "username2", "password", "MALE", LocalDate.now(), "USA");
 
+        when(userDao.findById("test1@example.com")).thenReturn(Optional.of(user1));
+        when(userDao.findById("test2@example.com")).thenReturn(Optional.of(user2));
+
+        userService.addFavorite("test2@example.com");
+
+        verify(userDao, times(1)).findById("test1@example.com");
+        verify(userDao, times(1)).findById("test2@example.com");
+        assertTrue(user1.getFavouriteRecipients().contains(user2));
+    }
 
 
 }
