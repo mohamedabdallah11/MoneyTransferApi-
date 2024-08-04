@@ -1,6 +1,7 @@
 package com.BM.MoneyTransfer.controller;
 
 
+import com.BM.MoneyTransfer.dto.SignUpRequestDTO;
 import com.BM.MoneyTransfer.dto.UserLoginRequestDTO;
 import com.BM.MoneyTransfer.entity.User;
 import com.BM.MoneyTransfer.service.JwtService;
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody User user, BindingResult result) {
+    public ResponseEntity<?> register(@Valid @RequestBody SignUpRequestDTO userSignUpDto, BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> errors = result.getFieldErrors().stream()
                     .collect(Collectors.toMap(
@@ -44,7 +45,7 @@ public class UserController {
 
             return ResponseEntity.badRequest().body(errors);
         }
-        userService.save(user);
+        userService.save(userSignUpDto.toUser());
         return ResponseEntity.ok("User registered successfully");
 
     }
