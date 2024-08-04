@@ -29,7 +29,7 @@ public class User {
     private String userName;
 
     @NotNull(message = "Password cannot be null")
-    @Size(min = 6, message = "Password must be at least 6 characters long")
+    @Size(min = 6, max = 60, message = "Password must be at least 6 characters and at most 60 characters long")
     @Column(name = "password")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$", message = "Password must contain at least one letter, one number, and one special character")
     private String password;
